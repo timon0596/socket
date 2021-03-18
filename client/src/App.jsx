@@ -46,8 +46,8 @@ const Chat = () => {
       ws.send('something');
     });
 
-    ws.addEventListener('message', (data) => {
-      console.log(data.data);
+    ws.addEventListener('message', (data2) => {
+      console.log(data2.data);
     });
   }, [ws]);
 
