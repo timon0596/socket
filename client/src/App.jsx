@@ -40,18 +40,23 @@ const Chat = () => {
   const [msg, setMsg] = useState('');
 
   useEffect(() => {
-    axios.post('http://localhost:8080/login', { login: 'admin', password: 'admin' });
-
     ws.addEventListener('open', () => {
       ws.send('something');
     });
 
-    ws.addEventListener('message', (data) => {
-      console.log(data.data);
+    ws.addEventListener('message', (res) => {
+      console.log(res.data);
     });
   }, [ws]);
 
-  const send = (text) => {
+  const send = async (text) => {
+    await axios.post('http://localhost:8080/login', { login: 'admin', password: 'admin' }, {
+      withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': 'http://localhost:3000',
+        'Content-Type': 'application/json',
+      },
+    });
     ws.send(text);
   };
   return (
