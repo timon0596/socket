@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignUp() {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [success, setSuccess] = useState(false);
@@ -60,48 +60,36 @@ export default function SignIn() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Отправил', login, password);
-    // axios.post('http://localhost:8080/login', { login: 'admin', password: 'admin' }).then((res) => { console.log(res); });
     axios.post('http://localhost:8080/login', { login: 'admin', password: 'admin' }, {
       withCredentials: true,
       headers: {
         'Access-Control-Allow-Origin': 'http://localhost:3000',
         'Content-Type': 'application/json',
       },
-      // }).then((response) => console.log(response));
     }).then((response) => response.status === 200 ? setSuccess(true) : setSuccess(false));
   };
 
   const handleLoginInput = (e) => {
     setLogin(e.currentTarget.value);
-    // console.log(e.currentTarget.value);
   };
 
   const handlePasswordInput = (e) => {
     setPassword(e.currentTarget.value);
-    // console.log(e.currentTarget.value);
   };
-
-  // useEffect(() => {
-  //   if (success) {
-  //     setSuccess(true)
-  //   } else {
-  //     setSuccess(true)
-  //   }
-  // }, [success]);
 
   return (
     <div>
-      { success === true ? <Redirect to="/" /> : (
+      { success === true ? <Redirect to="/login" /> : (
         <Container component="main" maxWidth="xs">
           {/* <SimpleAlerts /> */}
           <CssBaseline />
           <div className={classes.paper}>
             <Avatar className={classes.avatar}>
-              <LockOutlinedIcon />
+              {/* <LockOutlinedIcon /> */}
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
-      </Typography>
+              Sign up
+            </Typography>
             <form className={classes.form} noValidate>
               <TextField
                 variant="outlined"
@@ -129,9 +117,18 @@ export default function SignIn() {
                 value={password}
                 onChange={(e) => handlePasswordInput(e)}
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password2"
+                label="Password"
+                type="password"
+                id="password2"
+                autoComplete="current-password2"
+                value={password}
+                onChange={(e) => handlePasswordInput(e)}
               />
               <Button
                 type="submit"
@@ -141,20 +138,8 @@ export default function SignIn() {
                 className={classes.submit}
                 onClick={(e) => handleSubmit(e)}
               >
-                Sign In
-        </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="/" variant="body2">
-                    Forgot password?
-            </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="/SignUp" variant="body2">
-                    Don t have an account? Sign Up
-            </Link>
-                </Grid>
-              </Grid>
+                Sign Up
+              </Button>
             </form>
           </div>
           <Box mt={8}>

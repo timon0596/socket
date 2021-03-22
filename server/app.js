@@ -5,7 +5,9 @@ const Sequelize = require('sequelize');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-
+const jwt = require('jsonwebtoken');
+const { QueryTypes } = require('sequelize');
+const tokenKey = '1a2b-3c4d-5e6f-7g8h';
 const app = express();
 app.use(bodyParser.urlencoded({
   extended: true
@@ -40,19 +42,38 @@ const Users = sequelize.define('users', {
   id: { type: Sequelize.INTEGER, primaryKey: true, allowNull: false }
 }, { timestamps: false });
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
   const { login, password } = req.body
-  sequelize.authenticate().then(() => Users.findAll({
-    where: { login, password },
-    raw: true
-  })).then(d => console.log(d))
+  await sequelize.authenticate()
+  const [user] = await Users.findAll({ where: { login, password }, raw: true })
+  if (user) {
+    const token = jwt.sign({ id: user.id }, tokenKey)
+
+    // const users = await sequelize.query("UPDATE friends set status=2 where (friend_one=2 OR friend_two=3) AND (friend_one=2 OR friend_two=3)", { type: QueryTypes.UPDATE });
+
+    res.cookie('token', token, { expires: new Date(Date.now() + 3 * 1000 * 3600 + 1000 * 3600 * 24), sameSite: false })
+    return res.status(200).json({
+      id: user.id,
+      login: user.login,
+      token,
+    })
+  }
+  return res.status(200).json({ message: 'User not found' })
 })
+// app.post('/login', (req, res) => {
+//   const { login, password } = req.body
+//   sequelize.authenticate().then(() => Users.findAll({
+//     where: { login, password },
+//     raw: true
+//   })).then(d => console.log(d))
+// })
 
 app.get('/cookie', (req, res) => {
   // app.get('/cookie', cors(corsOptions), (req, res) => {
   res.cookie('token', '12345ABCDE')
   // console.log(res)
   res.send('Set Cookie')
+  // console.log(Date().now);
 })
 
 

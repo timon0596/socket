@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 // import { Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,7 +14,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
-import axios from 'axios';
+import { Redirect } from 'react-router-dom';
+import FriendsList from '../../components/FriendsList/FriendsList';
+// import { Redirect, Router, Switch } from 'react-router-dom';
+// import axios from 'axios';
 // import SignIn from './components/LoginForm/LoginForm';
 // import MenuAppBar from './components/Navbar/Navbar';
 
@@ -36,22 +40,33 @@ const useStyles = makeStyles({
     overflowY: 'auto',
   },
 });
-
+/* eslint-disable */
 const Chat = () => {
   const classes = useStyles();
   const [ws] = useState(new WebSocket('ws://localhost:8080'));
   const [msg, setMsg] = useState('');
+  const [isAuth, setIsAuth] = useState(true);
+
+  const getCokies = () => {
+    if (document.cookie) {
+      var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+      setIsAuth(true);
+    } else {
+      alert('Куков нет');
+      setIsAuth(false);
+    }
+  };
 
   useEffect(() => {
     // axios.post('http://localhost:8080/login', { login: 'admin', password: 'admin' });
-    axios.get('http://localhost:8080/cookie', {
-      withCredentials: true,
-      headers: {
-        'Access-Control-Allow-Origin': 'http://localhost:3000',
-        'Content-Type': 'application/json',
-      },
-    });
-
+    // axios.get('http://localhost:8080/cookie', {
+    //   withCredentials: true,
+    //   headers: {
+    //     'Access-Control-Allow-Origin': 'http://localhost:3000',
+    //     'Content-Type': 'application/json',
+    //   },
+    // });
+    getCokies();
     // const { data: { text } } = await axios.get('http://localhost:8080/set-cookie', {
     //   headers: {
     //     'Access-Control-Allow-Origin': '*',
@@ -71,16 +86,17 @@ const Chat = () => {
   const send = (text) => {
     ws.send(text);
   };
+
   return (
     <div>
       {/* <MenuAppBar /> */}
-      <Grid container>
+      {/* <Grid container>
         <Grid item xs={12}>
           <Typography variant="h5" className="header-message">Chat</Typography>
         </Grid>
       </Grid>
-      <Grid container component={Paper} className={classes.chatSection}>
-        <Grid item xs={3} className={classes.borderRight500}>
+      <Grid container component={Paper} className={classes.chatSection}> */}
+      {/* <Grid item xs={3} className={classes.borderRight500}>
           <List>
             <ListItem button key="RemySharp">
               <ListItemIcon>
@@ -157,8 +173,11 @@ const Chat = () => {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
+      <FriendsList />
       {/* <Route path="/Login" exact component={SignIn} /> */}
+      { isAuth === false ? <Redirect to="/login" /> : null}
+      <h1>{isAuth}</h1>
     </div>
   );
 };
