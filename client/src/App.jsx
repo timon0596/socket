@@ -13,6 +13,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import axios from 'axios';
+import Profile from './components/profile/Profile';
 
 const useStyles = makeStyles({
   table: {
@@ -68,14 +69,7 @@ const Chat = () => {
       </Grid>
       <Grid container component={Paper} className={classes.chatSection}>
         <Grid item xs={3} className={classes.borderRight500}>
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-              </ListItemIcon>
-              <ListItemText primary="John Wick" />
-            </ListItem>
-          </List>
+          <Profile />
           <Divider />
           <Grid item xs={12} style={{ padding: '10px' }} />
           <Divider />

@@ -11,12 +11,9 @@ module.exports = {
     {
       files: ['**/*.ts', '**/*.tsx'],
       plugins: ['@typescript-eslint'],
-      // rules: {
-      //   'no-use-before-define': 'off',
-      //   '@typescript-eslint/no-use-before-define': ['error'],
-      // },
     },
   ],
+
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -24,11 +21,13 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
+  parser: 'babel-eslint',
   plugins: [
     'react',
-    '@typescript-eslint',
   ],
   rules: {
     'linebreak-style': ['error', 'unix'],
+    'import/prefer-default-export': 0,
+    'react/jsx-props-no-spreading': 0,
   },
 };
