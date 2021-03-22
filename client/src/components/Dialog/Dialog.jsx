@@ -29,13 +29,62 @@ const useStyles = makeStyles({
    },
 });
 
-const Dialog = () => {
+const Dialog = (props) => {
    const classes = useStyles();
+   const [idDialog, setIdDialog] = useState(1)
    const [msg, setMsg] = useState('');
+   const [allDialog, setAlldialog] = useState([
+      {
+         id: 1,
+         messageHistory: ['Hey man, What s up ? ', 'Hey, Iam Good! What about you ?', 'Cool. i am good, let s catch up!'],
+      },
+      {
+         id: 2,
+         messageHistory: ['Здаров', 'Здаров, че хочел?', 'Ничё'],
+      },
+   ])
+
+   const updateDialog = () => {
+      const { selectedFriend } = props;
+      if (!selectedFriend) {
+         return;
+      } else {
+         setIdDialog(selectedFriend)
+      }
+   }
+
+   useEffect(() => {
+      updateDialog();
+   }, []);
+
+   useEffect(() => {
+      if (props.selectedFriend !== idDialog) {
+         updateDialog();
+      }
+   }, [props.selectedFriend]);
+
    return (
       <Grid item xs={9}>
          <List className={classes.messageArea}>
-            <ListItem key="1">
+            {allDialog.map(({ id, messageHistory, index }) => {
+               if (id === idDialog) {
+                  return (
+                     <ListItem key={id}>
+                        <Grid container>
+                           <Grid item xs={12}>
+                              <ListItemText align="right" primary={messageHistory[0]} />
+                              {/* <h1>{idDialog}</h1> */}
+                           </Grid>
+                           <Grid item xs={12}>
+                              <ListItemText align="right" secondary="09:30" />
+                           </Grid>
+                        </Grid>
+                     </ListItem>
+                  )
+               }
+               return null
+            })}
+            {/* <ListItem key="1">
                <Grid container>
                   <Grid item xs={12}>
                      <ListItemText align="right" primary="Hey man, What's up ?" />
@@ -64,7 +113,7 @@ const Dialog = () => {
                      <ListItemText align="right" secondary="10:30" />
                   </Grid>
                </Grid>
-            </ListItem>
+            </ListItem> */}
          </List>
          <Divider />
          <Grid container style={{ padding: '20px' }}>

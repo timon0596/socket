@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 // import { Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -16,6 +16,7 @@ import Avatar from '@material-ui/core/Avatar';
 // import SendIcon from '@material-ui/icons/Send';
 import { Redirect } from 'react-router-dom';
 import Dialog from '../Dialog/Dialog';
+import FriendsItem from '../FriendsItem/FriendsItem';
 
 const useStyles = makeStyles({
    table: {
@@ -39,6 +40,14 @@ const useStyles = makeStyles({
 
 const FriendsList = () => {
    const classes = useStyles();
+
+   const [selectedFriend, setSelectedFriend] = useState(1)
+
+   const onFriendSelected = (id) => {
+      // alert(id);
+      setSelectedFriend(id)
+   };
+
    return (
       <Grid container component={Paper} className={classes.chatSection}>
          <Grid item xs={3} className={classes.borderRight500}>
@@ -53,7 +62,8 @@ const FriendsList = () => {
             <Divider />
             <Grid item xs={12} style={{ padding: '10px' }} />
             <Divider />
-            <List>
+            <FriendsItem onFriendSelected={onFriendSelected} />
+            {/* <List>
                <ListItem button key="RemySharp">
                   <ListItemIcon>
                      <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
@@ -73,9 +83,9 @@ const FriendsList = () => {
                   </ListItemIcon>
                   <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
                </ListItem>
-            </List>
+            </List> */}
          </Grid>
-         <Dialog />
+         <Dialog selectedFriend={selectedFriend} />
       </Grid>
    );
 };
