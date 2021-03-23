@@ -15,7 +15,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
-import SimpleAlerts from '../SimpleAlerts/SimpleAlerts';
 
 function Copyright() {
   return (
@@ -60,40 +59,27 @@ export default function SignIn() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Отправил', login, password);
-    // axios.post('http://localhost:8080/login', { login: 'admin', password: 'admin' }).then((res) => { console.log(res); });
     axios.post('http://localhost:8080/login', { login: 'admin', password: 'admin' }, {
       withCredentials: true,
       headers: {
         'Access-Control-Allow-Origin': 'http://localhost:3000',
         'Content-Type': 'application/json',
       },
-      // }).then((response) => console.log(response));
     }).then((response) => response.status === 200 ? setSuccess(true) : setSuccess(false));
   };
 
   const handleLoginInput = (e) => {
     setLogin(e.currentTarget.value);
-    // console.log(e.currentTarget.value);
   };
 
   const handlePasswordInput = (e) => {
     setPassword(e.currentTarget.value);
-    // console.log(e.currentTarget.value);
   };
-
-  // useEffect(() => {
-  //   if (success) {
-  //     setSuccess(true)
-  //   } else {
-  //     setSuccess(true)
-  //   }
-  // }, [success]);
 
   return (
     <div>
       { success === true ? <Redirect to="/" /> : (
         <Container component="main" maxWidth="xs">
-          {/* <SimpleAlerts /> */}
           <CssBaseline />
           <div className={classes.paper}>
             <Avatar className={classes.avatar}>
@@ -101,7 +87,7 @@ export default function SignIn() {
             </Avatar>
             <Typography component="h1" variant="h5">
               Sign in
-      </Typography>
+            </Typography>
             <form className={classes.form} noValidate>
               <TextField
                 variant="outlined"
@@ -142,7 +128,7 @@ export default function SignIn() {
                 onClick={(e) => handleSubmit(e)}
               >
                 Sign In
-        </Button>
+              </Button>
               <Grid container>
                 <Grid item xs>
                   <Link href="/" variant="body2">

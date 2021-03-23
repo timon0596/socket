@@ -1,25 +1,8 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
-// import { Route } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import Fab from '@material-ui/core/Fab';
-import SendIcon from '@material-ui/icons/Send';
 import { Redirect } from 'react-router-dom';
 import FriendsList from '../../components/FriendsList/FriendsList';
-// import { Redirect, Router, Switch } from 'react-router-dom';
-// import axios from 'axios';
-// import SignIn from './components/LoginForm/LoginForm';
-// import MenuAppBar from './components/Navbar/Navbar';
 
 const useStyles = makeStyles({
   table: {
@@ -40,7 +23,7 @@ const useStyles = makeStyles({
     overflowY: 'auto',
   },
 });
-/* eslint-disable */
+
 const Chat = () => {
   const classes = useStyles();
   const [ws] = useState(new WebSocket('ws://localhost:8080'));
@@ -52,27 +35,12 @@ const Chat = () => {
       var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
       setIsAuth(true);
     } else {
-      alert('Куков нет');
       setIsAuth(false);
     }
   };
 
   useEffect(() => {
-    // axios.post('http://localhost:8080/login', { login: 'admin', password: 'admin' });
-    // axios.get('http://localhost:8080/cookie', {
-    //   withCredentials: true,
-    //   headers: {
-    //     'Access-Control-Allow-Origin': 'http://localhost:3000',
-    //     'Content-Type': 'application/json',
-    //   },
-    // });
     getCokies();
-    // const { data: { text } } = await axios.get('http://localhost:8080/set-cookie', {
-    //   headers: {
-    //     'Access-Control-Allow-Origin': '*',
-    //     'Content-Type': 'application/json',
-    //   },
-    // });
 
     ws.addEventListener('open', () => {
       ws.send('something');
@@ -89,95 +57,8 @@ const Chat = () => {
 
   return (
     <div>
-      {/* <MenuAppBar /> */}
-      {/* <Grid container>
-        <Grid item xs={12}>
-          <Typography variant="h5" className="header-message">Chat</Typography>
-        </Grid>
-      </Grid>
-      <Grid container component={Paper} className={classes.chatSection}> */}
-      {/* <Grid item xs={3} className={classes.borderRight500}>
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-              </ListItemIcon>
-              <ListItemText primary="John Wick" />
-            </ListItem>
-          </List>
-          <Divider />
-          <Grid item xs={12} style={{ padding: '10px' }} />
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-              </ListItemIcon>
-              <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
-              <ListItemText secondary="online" align="right" />
-            </ListItem>
-            <ListItem button key="Alice">
-              <ListItemIcon>
-                <Avatar alt="Alice" src="https://material-ui.com/static/images/avatar/3.jpg" />
-              </ListItemIcon>
-              <ListItemText primary="Alice">Alice</ListItemText>
-            </ListItem>
-            <ListItem button key="CindyBaker">
-              <ListItemIcon>
-                <Avatar alt="Cindy Baker" src="https://material-ui.com/static/images/avatar/2.jpg" />
-              </ListItemIcon>
-              <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
-            </ListItem>
-          </List>
-        </Grid>
-        <Grid item xs={9}>
-          <List className={classes.messageArea}>
-            <ListItem key="1">
-              <Grid container>
-                <Grid item xs={12}>
-                  <ListItemText align="right" primary="Hey man, What's up ?" />
-                </Grid>
-                <Grid item xs={12}>
-                  <ListItemText align="right" secondary="09:30" />
-                </Grid>
-              </Grid>
-            </ListItem>
-            <ListItem key="2">
-              <Grid container>
-                <Grid item xs={12}>
-                  <ListItemText align="left" primary="Hey, Iam Good! What about you ?" />
-                </Grid>
-                <Grid item xs={12}>
-                  <ListItemText align="left" secondary="09:31" />
-                </Grid>
-              </Grid>
-            </ListItem>
-            <ListItem key="3">
-              <Grid container>
-                <Grid item xs={12}>
-                  <ListItemText align="right" primary="Cool. i am good, let's catch up!" />
-                </Grid>
-                <Grid item xs={12}>
-                  <ListItemText align="right" secondary="10:30" />
-                </Grid>
-              </Grid>
-            </ListItem>
-          </List>
-          <Divider />
-          <Grid container style={{ padding: '20px' }}>
-            <Grid item xs={11}>
-              <TextField id="outlined-basic-email" label="Type Something" fullWidth onChange={(e) => setMsg(e.target.value)} value={msg} />
-            </Grid>
-            <Grid xs={1} align="right">
-              <Fab color="primary" aria-label="add" onClick={() => { send(msg); }}><SendIcon /></Fab>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid> */}
       <FriendsList />
-      {/* <Route path="/Login" exact component={SignIn} /> */}
       { isAuth === false ? <Redirect to="/login" /> : null}
-      <h1>{isAuth}</h1>
     </div>
   );
 };

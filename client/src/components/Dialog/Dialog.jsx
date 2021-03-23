@@ -73,7 +73,6 @@ const Dialog = (props) => {
                         <Grid container>
                            <Grid item xs={12}>
                               <ListItemText align="right" primary={messageHistory[0]} />
-                              {/* <h1>{idDialog}</h1> */}
                            </Grid>
                            <Grid item xs={12}>
                               <ListItemText align="right" secondary="09:30" />
@@ -84,36 +83,6 @@ const Dialog = (props) => {
                }
                return null
             })}
-            {/* <ListItem key="1">
-               <Grid container>
-                  <Grid item xs={12}>
-                     <ListItemText align="right" primary="Hey man, What's up ?" />
-                  </Grid>
-                  <Grid item xs={12}>
-                     <ListItemText align="right" secondary="09:30" />
-                  </Grid>
-               </Grid>
-            </ListItem>
-            <ListItem key="2">
-               <Grid container>
-                  <Grid item xs={12}>
-                     <ListItemText align="left" primary="Hey, Iam Good! What about you ?" />
-                  </Grid>
-                  <Grid item xs={12}>
-                     <ListItemText align="left" secondary="09:31" />
-                  </Grid>
-               </Grid>
-            </ListItem>
-            <ListItem key="3">
-               <Grid container>
-                  <Grid item xs={12}>
-                     <ListItemText align="right" primary="Cool. i am good, let's catch up!" />
-                  </Grid>
-                  <Grid item xs={12}>
-                     <ListItemText align="right" secondary="10:30" />
-                  </Grid>
-               </Grid>
-            </ListItem> */}
          </List>
          <Divider />
          <Grid container style={{ padding: '20px' }}>
