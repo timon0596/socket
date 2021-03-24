@@ -9,6 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
+import axios from 'axios';
 const useStyles = makeStyles({
    table: {
       minWidth: 650,
@@ -121,7 +122,13 @@ const Dialog = (props) => {
                <TextField id="outlined-basic-email" label="Type Something" fullWidth onChange={(e) => setMsg(e.target.value)} value={msg} />
             </Grid>
             <Grid xs={1} align="right">
-               <Fab color="primary" aria-label="add" onClick={() => { send(msg); }}><SendIcon /></Fab>
+               <Fab color="primary" aria-label="add" onClick={() => { axios.post('http://localhost:8080/login',{login:'admin',password:'admin'},{
+      withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }); }}><SendIcon /></Fab>
             </Grid>
          </Grid>
       </Grid>

@@ -16,6 +16,7 @@ import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
 import { Redirect } from 'react-router-dom';
 import FriendsList from '../../components/FriendsList/FriendsList';
+import axios from 'axios';
 // import { Redirect, Router, Switch } from 'react-router-dom';
 // import axios from 'axios';
 // import SignIn from './components/LoginForm/LoginForm';
@@ -48,31 +49,25 @@ const Chat = () => {
   const [isAuth, setIsAuth] = useState(true);
 
   const getCokies = () => {
-    if (document.cookie) {
-      var cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
       setIsAuth(true);
-    } else {
-      alert('Куков нет');
-      setIsAuth(false);
-    }
   };
 
-  useEffect(() => {
-    // axios.post('http://localhost:8080/login', { login: 'admin', password: 'admin' });
-    // axios.get('http://localhost:8080/cookie', {
-    //   withCredentials: true,
-    //   headers: {
-    //     'Access-Control-Allow-Origin': 'http://localhost:3000',
-    //     'Content-Type': 'application/json',
-    //   },
-    // });
+  useEffect(async () => {
+    try {
+      const {data:{user}} = await axios.get('http://localhost:8080/user',{
+      withCredentials: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  console.log(user);  
+    } catch (error) {
+      console.log(error);  
+    }
+    
     getCokies();
-    // const { data: { text } } = await axios.get('http://localhost:8080/set-cookie', {
-    //   headers: {
-    //     'Access-Control-Allow-Origin': '*',
-    //     'Content-Type': 'application/json',
-    //   },
-    // });
 
     ws.addEventListener('open', () => {
       ws.send('something');
