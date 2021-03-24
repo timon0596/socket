@@ -17,11 +17,11 @@ import SendIcon from '@material-ui/icons/Send';
 import { Redirect } from 'react-router-dom';
 import FriendsList from '../../components/FriendsList/FriendsList';
 import axios from 'axios';
+import { inject, observer } from 'mobx-react';
 // import { Redirect, Router, Switch } from 'react-router-dom';
 // import axios from 'axios';
 // import SignIn from './components/LoginForm/LoginForm';
 // import MenuAppBar from './components/Navbar/Navbar';
-
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -42,19 +42,19 @@ const useStyles = makeStyles({
   },
 });
 /* eslint-disable */
-const Chat = () => {
+const Chat = ({profile}) => {
   const classes = useStyles();
   const [ws] = useState(new WebSocket('ws://localhost:8080'));
-  const [msg, setMsg] = useState('');
   const [isAuth, setIsAuth] = useState(true);
 
   const getCokies = () => {
-      setIsAuth(true);
+      
   };
 
   useEffect(async () => {
     try {
-      const {data:{user}} = await axios.get('http://localhost:8080/user',{
+      
+      const {data:{user}} = await axios.get(`${process.env.REACT_APP_BASE_ADDR}/user`,{
       withCredentials: true,
       headers: {
         'Access-Control-Allow-Origin': '*',
@@ -62,9 +62,13 @@ const Chat = () => {
       },
     }
   );
-  console.log(user);  
+  profile.setInitials({...user})
+  setIsAuth(true);
+
+
     } catch (error) {
       console.log(error);  
+      setIsAuth(false)
     }
     
     getCokies();
@@ -76,99 +80,10 @@ const Chat = () => {
     ws.addEventListener('message', (data) => {
       console.log(data.data);
     });
-  }, [ws]);
-
-  const send = (text) => {
-    ws.send(text);
-  };
+  });
 
   return (
     <div>
-      {/* <MenuAppBar /> */}
-      {/* <Grid container>
-        <Grid item xs={12}>
-          <Typography variant="h5" className="header-message">Chat</Typography>
-        </Grid>
-      </Grid>
-      <Grid container component={Paper} className={classes.chatSection}> */}
-      {/* <Grid item xs={3} className={classes.borderRight500}>
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-              </ListItemIcon>
-              <ListItemText primary="John Wick" />
-            </ListItem>
-          </List>
-          <Divider />
-          <Grid item xs={12} style={{ padding: '10px' }} />
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-              </ListItemIcon>
-              <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
-              <ListItemText secondary="online" align="right" />
-            </ListItem>
-            <ListItem button key="Alice">
-              <ListItemIcon>
-                <Avatar alt="Alice" src="https://material-ui.com/static/images/avatar/3.jpg" />
-              </ListItemIcon>
-              <ListItemText primary="Alice">Alice</ListItemText>
-            </ListItem>
-            <ListItem button key="CindyBaker">
-              <ListItemIcon>
-                <Avatar alt="Cindy Baker" src="https://material-ui.com/static/images/avatar/2.jpg" />
-              </ListItemIcon>
-              <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
-            </ListItem>
-          </List>
-        </Grid>
-        <Grid item xs={9}>
-          <List className={classes.messageArea}>
-            <ListItem key="1">
-              <Grid container>
-                <Grid item xs={12}>
-                  <ListItemText align="right" primary="Hey man, What's up ?" />
-                </Grid>
-                <Grid item xs={12}>
-                  <ListItemText align="right" secondary="09:30" />
-                </Grid>
-              </Grid>
-            </ListItem>
-            <ListItem key="2">
-              <Grid container>
-                <Grid item xs={12}>
-                  <ListItemText align="left" primary="Hey, Iam Good! What about you ?" />
-                </Grid>
-                <Grid item xs={12}>
-                  <ListItemText align="left" secondary="09:31" />
-                </Grid>
-              </Grid>
-            </ListItem>
-            <ListItem key="3">
-              <Grid container>
-                <Grid item xs={12}>
-                  <ListItemText align="right" primary="Cool. i am good, let's catch up!" />
-                </Grid>
-                <Grid item xs={12}>
-                  <ListItemText align="right" secondary="10:30" />
-                </Grid>
-              </Grid>
-            </ListItem>
-          </List>
-          <Divider />
-          <Grid container style={{ padding: '20px' }}>
-            <Grid item xs={11}>
-              <TextField id="outlined-basic-email" label="Type Something" fullWidth onChange={(e) => setMsg(e.target.value)} value={msg} />
-            </Grid>
-            <Grid xs={1} align="right">
-              <Fab color="primary" aria-label="add" onClick={() => { send(msg); }}><SendIcon /></Fab>
-            </Grid>
-          </Grid>
-        </Grid>
-      </Grid> */}
       <FriendsList />
       {/* <Route path="/Login" exact component={SignIn} /> */}
       { isAuth === false ? <Redirect to="/login" /> : null}
@@ -177,4 +92,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default inject('profile')(observer(Chat));
