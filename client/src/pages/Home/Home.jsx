@@ -62,9 +62,8 @@ const Chat = ({profile}) => {
       },
     }
   );
-  profile.setInitials({...user})
-  setIsAuth(true);
-
+    profile.setInitials({...user})
+    setIsAuth(true);
 
     } catch (error) {
       console.log(error);  
@@ -74,7 +73,7 @@ const Chat = ({profile}) => {
     getCokies();
 
     ws.addEventListener('open', () => {
-      ws.send('something');
+      ws.send('opened');
     });
 
     ws.addEventListener('message', (data) => {
@@ -84,9 +83,7 @@ const Chat = ({profile}) => {
 
   return (
     <div>
-      <FriendsList />
-      {/* <Route path="/Login" exact component={SignIn} /> */}
-      { isAuth === false ? <Redirect to="/login" /> : null}
+      { isAuth  ? <FriendsList /> : <Redirect to="/Login" />}
       <h1>{isAuth}</h1>
     </div>
   );

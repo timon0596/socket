@@ -46,13 +46,14 @@ app.use((req,res,next)=>{
     if(token&&expires&&new Date()<new Date(expires)){
       res.locals.auth = true
       res.locals.user = { name,surname,id }
-      next()
+      
     }else{
       res.clearCookie('token')
       res.locals.user = null
       res.locals.auth =false
-      res.status(401).json({auth:false})
+      
     }
+    next()
   
 })
 app.get('/user',(req,res)=>{
