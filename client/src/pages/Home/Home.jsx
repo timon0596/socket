@@ -3,24 +3,15 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Redirect } from 'react-router-dom';
 import FriendsList from '../../components/FriendsList/FriendsList';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Dialog from '../../components/Dialog/Dialog';
+import Loader from '../../components/Loader/Loader'
+import ActionAlerts from '../../components/SimpleAlerts/SimpleAlerts';
 
 const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
   chatSection: {
     width: '100%',
-    height: '100vh',
-  },
-  headBG: {
-    backgroundColor: '#e0e0e0',
-  },
-  borderRight500: {
-    borderRight: '1px solid #e0e0e0',
-  },
-  messageArea: {
-    height: '70vh',
-    overflowY: 'auto',
   },
 });
 
@@ -29,6 +20,12 @@ const Chat = () => {
   const [ws] = useState(new WebSocket('ws://localhost:8080'));
   const [msg, setMsg] = useState('');
   const [isAuth, setIsAuth] = useState(true);
+
+  const [selectedFriend, setSelectedFriend] = useState(1)
+
+  const onFriendSelected = (id) => {
+    setSelectedFriend(id)
+  };
 
   const getCokies = () => {
     if (document.cookie) {
@@ -57,8 +54,15 @@ const Chat = () => {
 
   return (
     <div>
-      <FriendsList />
+      <Grid container component={Paper} className={classes.chatSection}>
+        <FriendsList onFriendSelected={onFriendSelected} />
+        <Dialog
+          selectedFriend={selectedFriend}
+        />
+      </Grid>
       { isAuth === false ? <Redirect to="/login" /> : null}
+      <Loader />
+      <ActionAlerts />
     </div>
   );
 };

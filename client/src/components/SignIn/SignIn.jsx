@@ -148,7 +148,6 @@ export default function SignIn() {
           </Box>
         </Container>
       )};
-      <h1>{console.log(success)}</h1>
     </div>
   );
 }
