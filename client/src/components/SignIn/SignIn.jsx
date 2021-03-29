@@ -15,6 +15,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import { Formik } from 'formik'
+import * as yup from 'yup'
+import { useFormik } from 'formik';
 
 function Copyright() {
   return (
@@ -56,8 +59,14 @@ export default function SignIn() {
   const [success, setSuccess] = useState(false);
   const classes = useStyles();
 
+  const validationSchema = yup.object().shape({
+    email: yup.string().email('Введите верный Email').required('Обязательно'),
+    password: yup.string().typeError('Должно быть строкой').required('Обязательно'),
+    // password2: yup.string().oneOf([yup.ref('password')], 'Пароли не совпадают').required('Обязательно'),
+  })
+
   const handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     console.log('Отправил', login, password);
     axios.post('http://localhost:8080/login', { login: 'admin', password: 'admin' }, {
       withCredentials: true,
@@ -88,66 +97,102 @@ export default function SignIn() {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <form className={classes.form} noValidate>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                autoFocus
-                value={login}
-                onChange={(e) => handleLoginInput(e)}
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={password}
-                onChange={(e) => handlePasswordInput(e)}
-              />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-              />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                onClick={(e) => handleSubmit(e)}
-              >
-                Sign In
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="/" variant="body2">
-                    Forgot password?
-            </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="/SignUp" variant="body2">
-                    Don t have an account? Sign Up
-            </Link>
-                </Grid>
-              </Grid>
-            </form>
+            <Formik
+              initialValues={{
+                email: '',
+                password: '',
+                password2: '',
+              }}
+              validateOnBlur={true}
+              validateOnChange={true}
+              onSubmit={(e) => handleSubmit(e)}
+              validationSchema={validationSchema}
+
+            >
+              {({ values, errors, touched, handleChange, handleBlur, isValid, handleSubmit, dirty }) => (
+                <form className={classes.form} >
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name={`email`}
+                    autoComplete="email"
+                    // autoFocus
+                    // value={login}
+                    // onChange={(e) => handleLoginInput(e)}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.email}
+                    errorMessage={errors.email}
+                  />
+
+                  {touched.email && errors.email && <p>{errors.email}{touched.email}</p>}
+
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    // autoComplete="current-password"
+                    // value={password}
+                    // onChange={(e) => handlePasswordInput(e)}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.password}
+                    errorMessage={errors.password}
+                  />
+
+                  {touched.password && errors.password && <p>{errors.password}</p>}
+
+                  <FormControlLabel
+                    control={<Checkbox value="remember" color="primary" />}
+                    label="Remember me"
+                  />
+
+                  {touched.password2 && errors.password2 && <p>{errors.password2}</p>}
+
+                  <Button
+                    type={`submit`}
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    // onClick={(e) => handleSubmit(e)}
+
+                    disabled={!isValid}
+                    onClick={handleSubmit}
+                  >
+                    Sign In
+                    </Button>
+                  <Grid container>
+                    <Grid item xs>
+                      <Link href="/" variant="body2">
+                        Forgot password?
+                    </Link>
+                    </Grid>
+                    <Grid item>
+                      <Link href="/SignUp" variant="body2">
+                        Don t have an account? Sign Up
+                    </Link>
+                    </Grid>
+                  </Grid>
+                </form>
+              )}
+            </Formik>
           </div>
           <Box mt={8}>
             <Copyright />
           </Box>
         </Container>
-      )};
-    </div>
+      )
+      };
+    </div >
   );
 }
